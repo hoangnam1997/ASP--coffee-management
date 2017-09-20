@@ -1,0 +1,83 @@
+﻿@{
+    Layout = null;
+}
+
+<div class="form-group">
+    <dl class="dl-horizontal">
+        <dt>
+            Name
+        </dt>
+
+        <dd>
+            @ViewBag.Detail.Name
+        </dd>
+
+        <dt>
+            Sex
+        </dt>
+
+        <dd>
+            @ViewBag.Detail.Sex
+        </dd>
+
+        <dt>
+            Email
+        </dt>
+
+        <dd>
+            @ViewBag.Detail.Email
+        </dd>
+
+
+        <dt>
+            PhoneNumber
+        </dt>
+
+        <dd>
+            @ViewBag.Detail.PhoneNumber
+        </dd>
+
+        <dt>
+            Identity
+        </dt>
+
+        <dd>
+            @ViewBag.Detail.Identity
+        </dd>
+
+        <dt>
+            Birthday
+        </dt>
+
+        <dd>
+            @ViewBag.Detail.BirthDay
+        </dd>
+
+        <dt>
+            CreatedDay
+        </dt>
+
+        <dd>
+            @ViewBag.Detail.CreateAt
+        </dd>
+
+        <dt>
+            Description
+        </dt>
+
+        <dd>
+            @ViewBag.Detail.Description
+        </dd>
+
+        <dt>
+            Address
+        </dt>
+
+        <dd>
+            @ViewBag.Detail.DetailAddress - @ViewBag.Detail.Ward.Name - @ViewBag.Detail.Ward.District.Name - @ViewBag.Detail.Ward.District.City.Name
+        </dd>
+    </dl>
+</div>
+
+
+

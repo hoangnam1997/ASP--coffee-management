@@ -1,0 +1,111 @@
+﻿@{
+    Layout = null;
+}
+<link href="~/Content/statisticContent/statisticStyle.css" rel="stylesheet" />
+<link href="~/Content/statisticContent/statisticTable.css" rel="stylesheet" />
+<script>
+    var listStatisticsViewModel =@Html.Raw(Json.Encode(ViewBag.ListStatisticsViewModel));
+</script>
+<div>
+    <!--Chart-->
+    <div class="row">
+        <div class="col-md-12 headerTable" style="margin-top:35px;">
+            <img id="changeStyle" src="~/Content/image/Refresh_icon.png" class="pull-right" />
+        </div>
+        <canvas id="statistic-Chart"></canvas>
+    </div>
+    <div style="clear:both;"></div>
+    <br />
+    <!--insert Table statistic-->
+    <div>
+        <div class="row">
+            <div class="col-sm-4 pull-right">
+                <div class="form-inline">
+                    <div class="form-group pull-right">
+                        <div class="input-group">
+                            <input type="text" id="searchTableInput" class="form-control" placeholder="Search for...">
+                            <div class="btn btn-default input-group-addon" onclick="functionSearch()" id="btnSearch">
+                                <i class="glyphicon glyphicon-search"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div><br />
+        <div class="panel panel-default">
+            <div class="panel-heading" style="height:55px;">
+                <div class="dropdown pull-right">
+                    <button class="btn btn-default dropdown-toggle" type="button" id="selectedDropdownItem" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+                        Show 5 entries
+                        <span class="caret"></span>
+                    </button>
+                    <ul class="dropdown-menu pagination-page-size" aria-labelledby="dropdownMenu1" ">
+                        <li data-page-size="5"><a value="5" onclick="changeRow(5,this)">Show 5 entries</a></li>
+                        <li data-page-size="10"><a value="10" onclick="changeRow(10,this)">Show 10 entries</a></li>
+                        <li data-page-size="15"><a value="15" onclick="changeRow(15,this)">Show 15 entries</a></li>
+                    </ul>
+                </div>
+            </div>
+            <table class="table results table-hover table-striped table-bordered" id="statisticsTable">
+                <thead>
+                    <tr>
+                        <th class="table-Sort" data-sort="Data" style="width:25%;">@ViewBag.statisticStyle</th>
+                        <th class="table-Sort" data-sort="Revenue" style="width:35%;">Doanh thu</th>
+                        <th class="table-Sort" data-sort="NumberOfBill" style="width:20%;">Số hóa đơn</th>
+                        <th class="detailTable" style="width:20%;">Hành động</th>
+                    </tr>
+                </thead>
+                <tbody></tbody>
+            </table>
+            <!--create select for page-->
+            <center>
+                <div id="paginationStatistics" class="pull-right">
+                </div>
+            </center>
+        </div>
+    </div>
+</div>
+<script src="/Scripts/jquery-3.1.1.min.js"></script>
+<script src="/Scripts/statisticScript/Chart.min.js"></script>
+<script src="/Scripts/statisticScript/StatisticChart.js"></script>
+<script src="/Scripts/statisticScript/StatisticsTable.js"></script>
+<script>
+    //excute create table
+    var columnFormat = {
+        "tr": {
+            "class": "col"
+        },
+        "td": [{
+            "class": "chil-row",
+            "text": "#Data#"
+        },{
+            "class": "chil-row",
+            "text": "#Revenue#"
+        },{
+            "class": "chil-row",
+            "text": "#NumberOfBill#"
+        }
+        ]
+    }
+    if('@ViewBag.statisticStyle' =='Ng&#224;y'){
+        columnFormat.td.push({
+            "style": "text-align:center",
+            "class": "detail-row detailTable",
+            "text":"<a href='#' onclick=\"gotoInfomationStatistic('#Data#')\">Chi tiết</a>"
+        });
+    }else{
+            $(".detailTable").remove();
+    }
+</script>
+<script src="~/Scripts/statisticScript/StatisticSalesScript.js"></script>
+<script>
+    //<!--function paint chart-->
+    styleChart="line";
+    var element = document.getElementById("statistic-Chart");
+    MyJS_paintStatistics(styleChart, element, @Html.Raw(Json.Encode(ViewBag.listLables)), @Html.Raw(Json.Encode(ViewBag.listSales)), @Html.Raw(Json.Encode(ViewBag.listNumber)));
+    //<!--change style of chart bar or line-->
+    $("#changeStyle").click(function(){
+        styleChart=styleChart=="bar"?"line":"bar";
+        MyJS_paintStatistics(styleChart, element, @Html.Raw(Json.Encode(ViewBag.listLables)), @Html.Raw(Json.Encode(ViewBag.listSales)), @Html.Raw(Json.Encode(ViewBag.listNumber)));
+    })
+</script>

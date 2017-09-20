@@ -1,0 +1,46 @@
+﻿<div class="modal fade" tabindex="-1" role="dialog" aria-labelledby="gridSystemModalLabel" id="shopHelperModal">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="gridSystemModalLabel">Need help?</h4>
+            </div>
+            <div class="modal-body">
+                <ul class="nav nav-tabs helper-tab">
+                    <li role="presentation" class="active" onclick="showBasicHelper(this)"><a>Basic</a></li>
+                    <li role="presentation" onclick="showAdvancedSearchHelper(this)"><a>Advanced search</a></li>
+                </ul>
+                <div class="shop-helper-basic">
+                    <div class="row">
+                        <button type="button" class="btn btn-default">
+                            <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>
+                        </button>
+                        <p>Add new shop</p>
+                    </div>
+                    <div class="row">
+                        <button type="button" class="btn btn-default">
+                            <span class="glyphicon glyphicon-edit" aria-hidden="true"></span>
+                        </button>
+                        <p>Update selected shop</p>
+                    </div>
+                    <div class="row">
+                        <button type="button" class="btn btn-default">
+                            <span class="glyphicon glyphicon-remove" aria-hidden="true"></span>
+                        </button>
+                        <p>Delete selected shop</p>
+                    </div>
+                </div>
+                <div class="shop-helper-advanced-search" style="display: none;">
+                    <div class="row">
+                        <p>Click <button type="button" class="btn btn-default">
+    <span class="glyphicon glyphicon-triangle-bottom" aria-hidden="true"></span>
+</button> to expand advanced search</p>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+            </div>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->

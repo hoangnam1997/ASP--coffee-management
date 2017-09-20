@@ -1,0 +1,32 @@
+﻿i.unsort {
+    background: url(../../fonts/unsort-up.png), url(../../fonts/unsort-down.png);
+    background-repeat: no-repeat;
+    background-size: 75%;
+    background-position: top right, bottom right;
+    text-align: center;
+    width: 15px;
+    height: 19px;
+    float: right;
+}
+
+i.sort-asc {
+    background: url(../../fonts/sort-up.png);
+    background-repeat: no-repeat;
+    background-size: 75%;
+    background-position: top right;
+    text-align: center;
+    width: 15px;
+    height: 19px;
+    float: right;
+}
+
+i.sort-desc {
+    background: url(../../fonts/sort-down.png);
+    background-repeat: no-repeat;
+    background-size: 75%;
+    background-position: bottom right;
+    text-align: center;
+    width: 15px;
+    height: 19px;
+    float: right;
+}

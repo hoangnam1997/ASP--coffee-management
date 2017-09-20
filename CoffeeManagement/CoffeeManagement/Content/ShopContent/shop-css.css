@@ -1,0 +1,139 @@
+﻿i.unsort {
+    background: url(/fonts/unsort-up.png), url(/fonts/unsort-down.png);
+    background-repeat: no-repeat;
+    background-size: 75%;
+    background-position: top right, bottom right;
+    text-align: center;
+    width: 15px;
+    height: 19px;
+    float: right;
+}
+
+i.sort-asc {
+    background: url(/fonts/sort-up.png);
+    background-repeat: no-repeat;
+    background-size: 75%;
+    background-position: top right;
+    text-align: center;
+    width: 15px;
+    height: 19px;
+    float: right;
+}
+
+i.sort-desc {
+    background: url(/fonts/sort-down.png);
+    background-repeat: no-repeat;
+    background-size: 75%;
+    background-position: bottom right;
+    text-align: center;
+    width: 15px;
+    height: 19px;
+    float: right;
+}
+
+.input-group-btn .btn {
+    border-width: 1px;
+    padding: 6px 16px;
+}
+table.fixed th {
+    text-align: center;
+}
+table.fixed th:nth-of-type(2) {
+    display: none;
+}
+
+table.fixed td {
+    overflow: hidden;
+}
+    table.fixed td:nth-of-type(1) {
+        width: 5%;
+    }
+
+    table.fixed td:nth-of-type(2) {
+        display: none;
+    }
+
+    table.fixed td:nth-of-type(3) {
+        width: 12%;
+    }
+
+    table.fixed td:nth-of-type(4) {
+        width: 15%;
+    }
+
+    table.fixed td:nth-of-type(5) {
+        width: 15%;
+    }
+
+    table.fixed td:nth-of-type(6) {
+        width: 12%;
+    }
+
+    table.fixed td:nth-of-type(7) {
+        width: 12%;
+    }
+
+    table.fixed td:nth-of-type(8) {
+        width: 10%;
+    }
+
+    table.fixed td:nth-of-type(9) {
+        text-align: center;
+    }
+
+
+.shop-helper-btn {
+    padding: 0 15px 0 0;
+}
+
+.entries-dropdown {
+    padding: 0;
+}
+
+.shop-helper-basic {
+    padding: 20px;
+}
+
+    .shop-helper-basic .row {
+        position: relative;
+        padding: 5px;
+    }
+
+.shop-helper-basic p {
+    margin: 0px 0px 2px 60px;
+    position: absolute;
+    bottom: 0;
+    font-style: normal;
+}
+
+.shop-helper-advanced-search {
+    padding: 20px;
+}
+    .shop-helper-advanced-search p {
+        margin: 0px 0px 2px 60px;
+        position: absolute;
+        bottom: 0;
+        font-style: normal;
+    }
+
+/*.panel > .panel-heading {
+    background-image: none;
+    background-color: #4DB6AC;
+    color: white;
+}
+
+.panel tbody {
+    background-color: #B2DFDB;
+}
+
+.panel th {
+    background-color: #80CBC4;
+}*/
+
+.page-pagination li a {
+    cursor: pointer;
+}
+
+.table-sort-pagination thead tr {
+    cursor: pointer;
+}

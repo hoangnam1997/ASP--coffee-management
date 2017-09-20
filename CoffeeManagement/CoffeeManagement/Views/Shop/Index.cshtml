@@ -1,0 +1,157 @@
+﻿
+@using CoffeeManagement.Models
+@model IEnumerable<Shop>
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_HomeLayout.cshtml";
+}
+
+<script>
+        var lst = [];
+        @foreach (var item in Model)
+        {
+            <text>
+        lst.push({
+            "No": lst.length + 1,
+            "ID": @(new HtmlString(@item.ID.ToString())),
+            "Name": "@(new HtmlString(@item.Name))",
+            "DetailAddress": "@(new HtmlString(@item.DetailAddress))",
+            "Ward": "@(new HtmlString(@item.Ward.Name))",
+            "District": "@(new HtmlString(@item.Ward.District.Name))",
+            "City": "@(new HtmlString(@item.Ward.District.City.Name))",
+            "Description": "@(new HtmlString(@item.Description))",
+            "WardID": @item.WardID,
+            "DistrictID": @item.Ward.DistrictID,
+            "CityID": @item.Ward.District.CityID
+        });
+            </text>
+        }
+</script>
+<link rel="stylesheet" href="~/Content/ShopContent/main.css">
+<link rel="stylesheet" href="~/Content/ShopContent/shop-css.css">
+
+@*<link href="~/Content/layout/css/light-bootstrap-dashboard.css" rel="stylesheet" />*@
+<script type="text/javascript" src="~/Scripts/ShopScripts/shop-script.js"></script>
+<script type="text/javascript" src="~/Scripts/ShopScripts/pagination.js"></script>
+
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-sm-4 pull-right">
+            <div class="input-group search-pagination">
+                <input type="text" class="form-control" placeholder="Search for..." id="txtSearch">
+                <span class="input-group-btn">
+                    <button class="btn btn-default" type="button" id="btnSearch">
+                        <span class="glyphicon glyphicon-search" aria-hidden="true"></span>
+                    </button>
+                    <button class="btn btn-default btn-advanced-search-expand" type="button">
+                        <span class="glyphicon glyphicon-triangle-bottom" aria-hidden="true"></span>
+                    </button>
+                </span>
+            </div><!-- /input-group -->
+        </div><!-- /.col-sm-6 -->
+    </div><br />
+    <div class="advanced-search" style="display:none;">
+        <div class="row">
+            <div class="col-lg-9 pull-right">
+                <div class="row advanced-search-data">
+                    <div class="col-lg-4 form-group">
+                        <label>Shop name</label>
+                        <input type="text" class="form-control">
+                    </div>
+                    <div class="col-lg-4 form-group">
+                        <label>Detail Address</label>
+                        <input type="text" class="form-control">
+                    </div>
+                    <div class="col-lg-4 form-group">
+                        <label>Description</label>
+                        <input type="text" class="form-control">
+                    </div>
+                </div>
+                <div class="row ward-district-city advanced-search-cmb">
+                    <div class="col-lg-4 form-group city">
+                        <label>City</label>
+                        <select class="form-control">
+                            <option value="">-- Chọn thành phố --</option>
+                            @foreach (var city in @ViewData["cities"] as IEnumerable<City>)
+                            {
+                                <option value="@city.ID">@city.Name</option>
+                            }
+                        </select>
+                    </div>
+                    <div class="col-lg-4 form-group district">
+                        <label>District</label>
+                        <select class="form-control" disabled> </select>
+                    </div>
+                    <div class="col-lg-4 form-group ward">
+                        <label>Ward</label>
+                        <select class="form-control" disabled> </select>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-lg-4 pull-left">
+                        <button class="btn btn-default btn-advanced-search" type="button">Advanced Search</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div><br />
+    <!-- TABLE -->
+    <div class="panel panel-default">
+        <!-- Default panel contents -->
+        <div class="panel-heading">
+            <div class="row">
+                <div class="col-lg-1 pull-left" data-toggle="tooltip" data-placement="top" title="Add new shop">
+                    <button type="button" class="btn btn-success btn-fill addButton" data-toggle="modal" data-target="#addShopModal" onclick="ResetModal()"><span class="glyphicon glyphicon-plus" aria-hidden="true"></span></button>
+                </div>
+                <div class="col-lg-10 pull-left entries-dropdown">
+                    <div class="pull-right">
+                        <div class="dropdown clearfix">
+                            <button class="btn btn-default dropdown-toggle" type="button" id="selectedDropdownItem" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+                                Show 5 entries
+                                <span class="caret"></span>
+                            </button>
+                            <ul class="dropdown-menu pagination-page-size" aria-labelledby="dropdownMenu1">
+                                <li data-page-size="5"><a value="5">Show 5 entries</a></li>
+                                <li data-page-size="10"><a value="10">Show 10 entries</a></li>
+                                <li data-page-size="15"><a value="15">Show 15 entries</a></li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                <div class="shop-helper-btn col-lg-1 pull-right">
+                        <button type="button" class="btn btn-default pull-right" data-toggle="modal" data-target="#shopHelperModal">
+                            <span class="glyphicon glyphicon-question-sign" aria-hidden="true"></span>
+                        </button>
+                </div>
+            </div>
+        </div>
+        <!-- Table -->
+        <table class="table table-bordered table-pagination table-sort-pagination fixed table-striped table-hover" id="shopTable">
+            <thead>
+                <tr>
+                    <th data-sort-column="No">No.</th>
+                    <th>ID</th>
+                    <th data-sort-column="Name">Name</th>
+                    <th data-sort-column="DetailAddress">Detail Address</th>
+                    <th data-sort-column="Ward">Ward</th>
+                    <th data-sort-column="District">District</th>
+                    <th data-sort-column="City">City</th>
+                    <th>Description</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody id="shopTableBody"></tbody>
+        </table>
+    </div>
+    <div class="row container-fluid">
+        <!-- Phim Chuc Nang Them-->
+        <!-- Pagination -->
+        <div class="pull-right page-pagination">
+
+        </div>
+    </div>
+    @Html.Partial("~/Views/Shop/AddShop.cshtml")
+    @Html.Partial("~/Views/Shop/DeleteShop.cshtml")
+    @Html.Partial("~/Views/Shop/ShopHelper.cshtml")
+</div>

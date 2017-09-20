@@ -1,0 +1,209 @@
+﻿@{
+    Layout = null;
+}
+
+<div class="div-add-user">
+    <label class="control-label">Name</label>
+
+    <input type="text" class="form-control" value="@ViewBag.Edit.Name" id="NameUserEdit" onkeyup="validateName()" />
+
+</div>
+
+<div class="div-add-user">
+    <label class="control-label">Email</label>
+
+    <input type="text" class="form-control" value="@ViewBag.Edit.Email" id="EmailUserEdit" onkeyup="validateMail()" />
+
+</div>
+
+<div class="div-add-user">
+    <label class="control-label">PhoneNumber</label>
+
+    <input type="text" class="form-control" id="PhoneNumberUserEdit" value="@ViewBag.Edit.PhoneNumber" onblur="validatePhone()" />
+
+</div>
+
+<div class="div-add-user">
+    <label class="control-label">Identity</label>
+
+    <input type="text" class="form-control" id="IdentityUserEdit" value="@ViewBag.Edit.Identity" onblur="validateIdentity()" placeholder="212481234"/>
+
+</div>
+
+<div class="div-add-user">
+    <label class="control-label">BirthDay</label>
+
+    <input type="date" class="form-control" id="BirthDayUserEdit" value='@ViewBag.Edit.BirthDay.ToString("yyyy-MM-dd")' onblur="validateDate()" />
+
+</div>
+
+<div class="div-add-user">
+    <label class="control-label">Sex</label>
+
+    <select class="form-control" id="SexUserEdit">
+        <option value="Nam"> Nam </option>
+        <option value="Nữ"> Nữ </option>
+    </select>
+
+</div>
+
+<div class="div-add-user">
+    <label class="control-label">Description</label>
+
+    <input type="text" class="form-control" id="DescriptionUserEdit" value="@ViewBag.Edit.Description" />
+
+</div>
+
+<div class="div-add-user">
+    <label class="control-label">HomeNumber</label>
+
+    <input type="text" class="form-control" id="DetailAddressUserEdit" value="@ViewBag.Edit.DetailAddress" />
+
+</div>
+
+<div class="div-add-user">
+    <label class="control-label">Ward</label>
+
+    <select id="WardIDUser" class="form-control">
+
+        @foreach (var item in ViewBag.Wards)
+        {
+            <option value="@item.ID"> @item.Name</option>
+        }
+    </select>
+
+</div>
+
+<div class="div-add-user">
+    <label class="control-label">District</label>
+
+    <select id="District" class="form-control" onchange="GetListWard()">
+
+        @foreach (var item in ViewBag.Districts)
+        {
+            <option value="@item.ID"> @item.Name</option>
+        }
+    </select>
+
+</div>
+
+<div class="form-group">
+    <label class="control-label">City</label>
+
+    <select id="City" class="form-control" onchange="GetListDistrict()">
+
+        @foreach (var item in ViewBag.Cities)
+        {
+            <option value="@item.ID"> @item.Name</option>
+        }
+    </select>
+</div>
+
+<div>
+    <button class="btn btn-success" id="btn-ok-edit"> Ok </button>
+    <button class="btn btn-danger" id="btn-cancel-edit"> Cancel </button>
+</div>
+
+
+<script>
+
+        var tempW = @ViewBag.Edit.WardID;
+        $("#WardIDUser option").each(function () {
+            if ($(this).val() == tempW) {
+                $(this).attr("selected", "selected");
+            }
+        });
+
+        var tempD = @ViewBag.Edit.Ward.DistrictID;
+        $("#District option").each(function () {
+            if ($(this).val() == tempD) {
+
+                $(this).attr("selected", "selected");
+            }
+        });
+
+        var tempC = @ViewBag.Edit.Ward.District.CityID;
+        $("#City option").each(function () {
+            if ($(this).val() == tempC) {
+                $(this).attr("selected", "selected");
+            }
+        });
+
+
+        var tempS = '@ViewBag.Edit.Sex';
+        $("#SexUserEdit option").each(function () {
+            if ($(this).val() == tempS) {
+                $(this).attr("selected", "selected");
+            }
+        });
+
+</script>
+
+<script>
+    function validatePhone() {
+        var phone = $('#PhoneNumberUserEdit').val();
+
+        if (!isPhoneNumber(phone)) {
+            $('#PhoneNumberUserEdit').css("border-color", "red");
+            return false;
+        } else {
+            $('#PhoneNumberUserEdit').css("border-color", "green");
+        }
+        return true;
+    }
+
+    function validateName() {
+        var name = $('#NameUserEdit').val();
+
+        if (isEmpty(name)) {
+            $('#NameUserEdit').css("border-color", "red");
+            return false;
+        } else {
+            $('#NameUserEdit').css("border-color", "green");
+        }
+        return true;
+    }
+
+    function validateMail() {
+        var mail = $('#EmailUserEdit').val();
+
+        if (!isMail(mail)) {
+            $('#EmailUserEdit').css("border-color", "red");          
+        } else {
+            $('#EmailUserEdit').css("border-color", "green");           
+        }
+    }
+
+    function validateDate() {
+        if ($('#BirthDayUserEdit').val() == '') {
+            $('#BirthDayUserEdit').css("border-color", "red");          
+        } else {
+            var currentTime = new Date();
+            var inputdate = new Date($('#BirthDayUserEdit').val())
+            if (currentTime.getFullYear() - inputdate.getFullYear() < 12 || currentTime.getFullYear() - inputdate.getFullYear() > 90) {
+                $('#BirthDayUserEdit').css("border-color", "red");                
+                return false;
+            }
+            else {
+                $('#BirthDayUserEdit').css("border-color", "green");
+            }
+
+        }
+    }
+
+    function validateIdentity(){
+        var identity = $('#IdentityUserEdit').val();
+
+        if (!isIdentity(identity)) {
+            $('#IdentityUserEdit').css("border-color", "red");
+            return false;
+        } else {
+            $('#IdentityUserEdit').css("border-color", "green");
+        }
+        return true;
+    }
+</script>
+
+
+
+

@@ -1,0 +1,60 @@
+﻿
+@{
+    Layout = "~/Views/Shared/_HomeLayout.cshtml";
+}
+<!--Set style-->
+<link href="~/Content/statisticContent/statisticStyle.css" rel="stylesheet" />
+<div class="container-fluid">
+    <!--Select time to statistics-->
+    <div>
+        <!--select startDay and endDay-->
+        <div id="fSetTime" class="frmMenu">
+            <div style="display:inline-block;" class="form-inline">
+                <div class="form-group">
+                    <label class="lblIndex">Từ ngày:</label>
+                    <input name="startDay" id="startDay" class="input-date form-control" type="date">
+                </div>
+                <br class="brNone"/>
+                <div class="form-group">
+                    <label class="lblIndex">Đến ngày:</label>
+                    <input name="endDay" id="endDay" class="input-date form-control" type="date">
+                </div>
+            </div>
+            <div style="display:inline-block;">
+                <div style="display:inline-block;padding-right:5px;border-right:1px solid #d5d0d0; padding-left:5px;">
+                    <label id="lblAdvanceSearch" class="advanced">»</label>
+                    <form id="fAdvancedMenu" action="" style="display:inline-block;">
+                        <input type="radio" name="radioAdvanced" value="days" id="days">
+                        <label for="days" style="height:13px;">Ngày</label><br>
+                        <input type="radio" name="radioAdvanced" value="products" id="products">
+                        <label for="products" style="height:13px;">Sản phẩm</label><br>
+                        <input type="radio" name="radioAdvanced" value="groupProducts" id="groupProducts">
+                        <label for="groupProducts" style="height:13px;">Nhóm sản phẩm</label>
+                    </form>
+                </div>
+                <div style="display:inline-block;position:relative;bottom:4px;left:4px;">
+                    <div id="messageValidate" style="font-size:13px; color:orangered"></div>
+                    <div>
+                        <button type="submit" id="btnStatistics" class="btn btn-success" style="width:auto;height:auto;font-size:13px;display:inline-block;" onclick="getStatistic()">Thống kê</button>
+                        <div id="loaderStatistic" class="loader">.....</div>
+                    </div>
+                </div>
+                <br />
+            </div>
+            <!--Button click view sales Statistics-->
+
+        </div>
+    </div>
+    <div id="chartStatistic">
+        <!--Sales statistic chart and table-->
+    </div>
+</div>
+<!--add references javascript for DateTimePicker-->
+<script src="~/Scripts/jquery-3.1.1.min.js"></script>
+<script src="~/Scripts/statisticScript/IndexScript.js"></script>
+<script>
+    //<!--cript setup dateTime-->
+    $('#startDay').val(@Html.Raw(Json.Encode(ViewBag.startDate)));
+    $('#endDay').val(@Html.Raw(Json.Encode(ViewBag.endDate)));
+</script>
+

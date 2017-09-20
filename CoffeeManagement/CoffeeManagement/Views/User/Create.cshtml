@@ -1,0 +1,175 @@
+﻿@{
+    Layout = null;
+}
+
+<div class="div-add-user">
+    <label class="control-label">Name</label>
+
+    <input type="text" class="form-control" id="NameUserCreate" onblur="validateName()" placeholder="Nguyễn Văn A"/>
+
+</div>
+
+<div class="div-add-user">
+    <label class="control-label">Password</label>
+    <input type="password" class="form-control" id="PasswordUserCreate" onblur="validatePass()" placeholder="nguyenvana_123"/>
+
+</div>
+
+<div class="div-add-user">
+    <label class="control-label">Email</label>
+
+    <input type="text" class="form-control" id="EmailUserCreate" onblur="validateMail()" placeholder="nguyenvana@gmail.com" />
+
+</div>
+
+<div class="div-add-user">
+    <label class="control-label">PhoneNumber</label>
+
+    <input type="text" class="form-control" id="PhoneNumberUserCreate" onblur="validatePhone()" placeholder="01644347147" />
+
+</div>
+<div class="div-add-user">
+    <label class="control-label">BirthDay</label>
+
+    <input type="date" class="form-control" id="BirthDayUserCreate" value="1996-06-16" onblur="validateDate()" />
+
+</div>
+<div class="div-add-user">
+    <label class="control-label">Sex</label>
+
+    <select id="SexUserCreate" class="form-control">
+        <option value="Nam"> Nam </option>
+        <option value="Nữ"> Nữ </option>
+    </select>
+
+</div>
+
+<div class="div-add-user">
+    <label class="control-label">HomeNumber</label>
+
+    <input type="text" class="form-control" id="DetailAddressUserCreate" />
+
+</div>
+
+<div class="div-add-user">
+    <label class="control-label">Ward</label>
+
+    <select class="form-control" id="WardIDUser">
+        @foreach (var item in ViewBag.Wards)
+        {
+            <option value="@item.ID"> @item.Name</option>
+        }
+    </select>
+
+</div>
+<div class="div-add-user">
+    <label class="control-label">District</label>
+
+    <select class="form-control" id="District" onchange="GetListWard()">
+        @foreach (var item in ViewBag.Districts)
+        {
+            <option value="@item.ID"> @item.Name</option>
+        }
+    </select>
+
+</div>
+<div class="div-add-user">
+    <label class="control-label">City</label>
+
+    <select class="form-control" id="City" onchange="GetListDistrict()">
+        @foreach (var item in ViewBag.Cities)
+        {
+            <option value="@item.ID"> @item.Name</option>
+        }
+    </select>
+
+</div>
+
+<div>
+    <button class="btn btn-success" id="btn-ok-create"> Ok </button>
+    <button class="btn btn-danger" id="btn-cancel-create"> Cancel </button>
+</div>
+
+
+
+<script>
+
+    var tempC = 1;
+    $("#City option").each(function () {
+        if ($(this).val() == tempC) {
+            $(this).attr("selected", "selected");
+        }
+    });
+
+    var tempD = 1;
+    $("#District option").each(function () {
+        if ($(this).val() == tempD) {
+            $(this).attr("selected", "selected");
+        }
+
+    });
+
+    function validatePhone() {
+        var phone = $('#PhoneNumberUserCreate').val();
+
+        if (!isPhoneNumber(phone)) {
+            $('#PhoneNumberUserCreate').css("border-color", "red");
+            return false;
+        } else {
+            $('#PhoneNumberUserCreate').css("border-color", "green");
+        }
+        return true;
+    }
+
+    function validateName() {
+        var name = $('#NameUserCreate').val();
+
+        if (isEmpty(name)) {
+            $('#NameUserCreate').css("border-color", "red");
+            return false;
+        } else {
+            $('#NameUserCreate').css("border-color", "green");
+        }
+        return true;
+    }
+
+    function validateMail() {
+        var mail = $('#EmailUserCreate').val();
+
+        if (!isMail(mail)) {
+            $('#EmailUserCreate').css("border-color", "red");            
+        } else {
+            $('#EmailUserCreate').css("border-color", "green");            
+        }
+    }
+
+    function validateDate() {
+        if ($('#BirthDayUserCreate').val() == '') {
+            $('#BirthDayUserCreate').css("border-color", "red");            
+        } else {
+            var currentTime = new Date();
+            var inputdate = new Date($('#BirthDayUserCreate').val())
+            if (currentTime.getFullYear() - inputdate.getFullYear() < 12 || currentTime.getFullYear() - inputdate.getFullYear() > 90) {
+                $('#BirthDayUserCreate').css("border-color", "red");                
+                return false;
+            }
+            else {
+                $('#BirthDayUserCreate').css("border-color", "green");
+            }
+        }
+    }
+
+    function validatePass() {
+        var pass = $('#PasswordUserCreate').val();
+
+        if (!isPassword(pass)) {
+            $('#PasswordUserCreate').css("border-color", "red");
+        } else {
+            $('#PasswordUserCreate').css("border-color", "green");
+        }
+    }
+
+</script>
+
+
+

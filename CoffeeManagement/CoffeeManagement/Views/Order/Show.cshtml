@@ -1,0 +1,185 @@
+﻿@model DateTime?
+@{
+}
+<link href="~/Content/loader.css" rel="stylesheet" />
+<style>
+    .displayNone {
+        display: none;
+    }
+</style>
+
+<div style="padding:20px">
+    <form class="form-inline search-tool" style="display:none" onsubmit="event.preventDefault(); Search(this)">
+        <div class="form-group">
+            <label for="txtTableName">Tên bàn</label><br>
+            <input type="text" class="form-control" id="txtTableName" placeholder="Tên bàn">
+        </div>
+        <div class="form-group">
+            <label for="txtPromotion">Tên Khuyến mãi</label><br>
+            <input type="text" class="form-control" id="txtPromotion" placeholder="Khuyến mãi">
+        </div>
+        <div class="form-group">
+            <label for="txtCustomer">Tên khách hàng</label><br>
+            <input type="text" class="form-control" id="txtCustomer" placeholder="Tên khách hàng">
+        </div>
+        <div class="form-group">
+            <label for="txtCreateDate">Ngày tạo hóa đơn</label><br>
+            <input type="date" class="form-control" id="txtCreateDate" placeholder="Ngày tạo">
+        </div>
+        <br>
+        <button type="button" class="btn btn-primary pull-right" onclick="showAdvance()">Ẩn</button>
+        <button type="submit" class="btn btn-primary pull-right" style="margin-right:5px">Tìm kiếm</button>
+        <div class="loader pull-right" style="margin-right:6px;display:none"></div><br><br>
+    </form>
+    <div class="row search-tool">
+        <button type="submit" class="btn btn-primary col-sm-1" style="margin-right:1%" onclick="showAdvance()"><span>Nâng Cao</span></button>
+        <div class="col-sm-1 loader" style="display:none"></div>
+        <div class="col-sm-4 pull-right">
+            <div class="input-group search-pagination" style="display:flex">
+                <input type="text" id="txtSearch" class="form-control searchTableInput" placeholder="Search for...">
+                <span class="input-group">
+                    <button id="btnSearch" class="btn btn-default" type="button" onclick="functionSearch('#txtSearch')">
+                        <i class="glyphicon glyphicon-search" style="width:43.95px"></i>
+                    </button>
+                </span>
+            </div><!-- /input-group -->
+        </div><!-- /.col-sm-6 -->
+    </div>
+</div>
+<div class="panel panel-default table-data">
+    <!-- Default panel contents -->
+    <div class="col-md-12 panel-heading">
+        <div class="col-md-1 dropdown" style="margin-left:88%">
+            <button class="btn btn-default dropdown-toggle" type="button" id="selectedDropdownItem" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+                Show 5 entries
+                <span class="caret"></span>
+            </button>
+            <ul class="dropdown-menu pagination-page-size" aria-labelledby="dropdownMenu1">
+                <li data-page-size="5"><a value="5" onclick=changeRow(5,this)>Show 5 entries</a></li>
+                <li data-page-size="10"><a value="10" onclick=changeRow(10,this)>Show 10 entries</a></li>
+                <li data-page-size="15"><a value="15" onclick=changeRow(15,this)>Show 15 entries</a></li>
+            </ul>
+        </div>
+    </div>
+    <!-- Table -->
+    <table class="table results table-hover table-striped table-bordered table-pagination table-sort-pagination" id="statisticsTable">
+        <thead>
+            <tr style="height:50px;padding-bottom:10%">
+                <th>Table</th>
+                <th>Promotion</th>
+                <th>Customer</th>
+                <th>CreateDate</th>
+                <th>Total</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody></tbody>
+    </table>
+</div>
+<!--create select for page-->
+<div id="paginationStatistics" style="float:right;"></div>
+<script src="~/Scripts/statisticScript/StatisticsTable.js"></script>
+<script>
+    //set format for table
+    setColumnFortmat({//columnFormat
+        "tr": {
+            "data-id": "#Id#",
+            "border-color": "#8b4513"
+        },
+        "td": [{
+            "data-id": "#TableId#",
+            "text": "#TableName#"
+        }, {
+                "data-id": "PromotionId",
+                "text": "#PromotionName#"
+        }, {
+                "data-id": "CustomerId",
+                "text": "#CustomerName#"
+        }, {
+                "text": "#CreateDate#"
+        }, {
+                "text": "#Total#"
+        }, {
+                "style":"text-align:center",
+                "text": "<a class=\"glyphicon glyphicon-eye-open\" style=\"font-size:40px\" data-toggle=\"modal\" data-target=\"#popup\" onclick=\"ShowDetail(this)\"></a>"
+        }]
+    });
+    function Search(form) {
+        $('.loader').show();
+        var querystring = "";
+        //create query string
+        if (form.txtTableName.value != "") {
+            querystring += "tableName=" + form.txtTableName.value;
+        }
+        if (form.txtPromotion.value != "") {
+            querystring += "&promotionName=" + form.txtPromotion.value;
+        }
+        if (form.txtCustomer.value != "") {
+            querystring += "&customerName=" + form.txtCustomer.value;
+        }
+        if (form.txtCreateDate.value != "") {
+            querystring += "&createDate=" + new Date(form.txtCreateDate.value).toISOString("YYYY-MM-DD");
+        }
+        //request data
+        $.ajax({
+            type: "GET",
+            url: "/order/search?" + querystring,
+            success: function (data, textStatus, jqXHR) {
+                $('.loader').hide();
+                if (jqXHR.status == 200) {
+                    ////show new data to table
+                    createPageTable(data);
+                } else {
+                    alert(textStatus);
+                }
+            },
+            error: function (jqXHR, textStatus, errorThrown) {
+                alert(errorThrown);
+            }
+        });
+    }
+
+    function ShowDetail(element)
+    {
+        var id = $(element).closest('tr').attr('data-id');
+        $.ajax(
+            {
+                type: "GET",
+                url: "/order/Detail?orderId=" + id,
+                success: function (data, textStatus, jqXHR) {
+                    if (jqXHR.status == 200) {
+                        $('.modal').html(data);
+                    } else {
+                        alert(textStatus);
+                    }
+                },
+                error: function (jqXHR, textStatus, errorThrown) {
+                    alert(errorThrown);
+                }
+            }
+        );
+    }
+    window.onload = function () {
+        @if (Model.HasValue)
+        {
+            <text>$("#txtCreateDate").val("@Model.Value.ToString("yyyy-MM-dd")");</text>
+            <text>$('form.search-tool').submit();</text>
+        }
+    };
+
+//show-hidden advance search
+    function showAdvance() {
+        $('.search-tool').toggle();
+    }
+
+    //search in tabe
+    function functionSearch(element) {
+        changesText($(element).val());
+    }
+    //change page in table
+    function changeRow(number, element) {
+        var text = $(element).text() + ' <span class="caret" ></span >';
+        $('#selectedDropdownItem').html(text);
+        changeCountRowInPage(number);
+    }
+</script>

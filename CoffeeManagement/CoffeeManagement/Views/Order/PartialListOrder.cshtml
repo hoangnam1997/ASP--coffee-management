@@ -1,0 +1,43 @@
+﻿@using System.Security.Cryptography
+@model List<CoffeeManagement.Models.ViewModel.OrderViewModel>
+
+@{
+    Layout = null;
+}
+@{
+
+    for (var i = 0; i < Model.Count; i++)
+    {
+        var flag = 0;
+
+        <tr class="col">
+            <!-- Button trigger modal -->
+            <td class="col-lg-1 col-md-2 col-sm-2 col-xs-1">
+                <button type="button" class="btn btn-primary table-tbn" value="">
+                    <span>Bàn:</span> @Model[i].TableId <br /><span>Order:  </span><span class="badge"><span class="worked idorder">@Model[i].OrderId </span></span>
+                </button>
+            </td>
+            <td class="tditem col-lg-11 col-md-10 col-sm-10 col-xs-11">
+                @for (var j = i; j < Model.Count; j++)
+                {
+                    @Html.Action("PartialItem", "Order", Model[j])
+                    if (j == Model.Count - 1)
+                    {
+                        flag = 1;
+                        break;
+                    }
+                    if (Model[i].OrderId != Model[j + 1].OrderId)
+                    {
+                        i = j;
+                        break;
+                    }
+                }
+            </td>
+        </tr>
+        if (flag == 1)
+        {
+            break;
+        }
+    }
+}
+

@@ -1,0 +1,208 @@
+﻿@model PagedList.IPagedList<CoffeeManagement.Models.ViewModel.CustomerShopViewModel>
+@using PagedList.Mvc;
+
+<link href="~/Content/PagedList.css" rel="stylesheet" type="text/css" />
+<link href="~/Content/User.css" rel="stylesheet" type="text/css" />
+
+@{
+    ViewBag.Title = "Index Customer";
+}
+
+<h2> shop <strong> @ViewBag.Name</strong> - List Customer </h2>
+
+
+<div class="form-group">
+    <button class="btn btn-success" onclick="CreatePopup('Add new customer')" title="Add new customer"> <span class="glyphicon glyphicon-plus"> </span></button>
+    <div class="form-inline pull-right">
+        <input type="text" id="search-text" class="form-control" placeholder="..." title="search on html table" onkeyup="mySearch()"/>
+        <button class="btn btn-success" type="submit" onclick="Search()" title="search on other page"> <span class="glyphicon glyphicon-search"> </span> </button>
+    </div>
+</div>
+
+
+<div class="form-group" id="table-list">
+    <table class="table table-bordered fixed results">
+        <thead class="th-bg">
+            <tr>
+                <th>
+                    @Html.ActionLink("Name", "Index", new { sortOrder = ViewBag.NameSortParm })
+                </th>
+                <th>
+                    Email
+                </th>
+
+                <th>
+                    Sex
+                </th>
+
+                <th>
+                    @Html.ActionLink("BirthDay", "Index", new { sortOrder = ViewBag.DateSortParm })
+                </th>
+
+                <th>
+                    PhoneNumber
+                </th>
+                <th>
+                    Shop
+                </th>
+
+                <th>
+                    Action
+                </th>
+            </tr>
+        </thead>
+
+        <tbody class="tr-bg">
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>
+                        @item.Name
+                    </td>
+                    <td>
+                        @item.Email
+                    </td>
+
+                    <td>
+                        @item.Sex
+                    </td>
+
+                    <td>
+                        @item.BirthDay.Value.ToString("yyyy-MM-dd")
+                    </td>
+                   
+                    <td>
+                        @item.PhoneNumber
+                    </td>
+                    <td>
+                        @item.ShopName
+                    </td>
+
+                    <td>
+                        <button class="btn btn-default" onclick="DetailPopup('Detail', @item.Id)" title="detail"> <span class="glyphicon glyphicon-eye-open"> </span></button>
+                       @if (item.ShopId == null)
+                       {
+                        <button class="btn btn-primary" onclick="EditPopup(this, 'Edit', @item.Id)" title="edit"> <span class="glyphicon glyphicon-edit"> </span></button>
+                       }
+                       else
+                       {
+                           if (item.ShopId == 0)
+                           {
+                            <button class="btn btn-primary" onclick="EditPopup(this, 'Edit', @item.Id)" title="edit"> <span class="glyphicon glyphicon-edit"> </span></button>
+                            <button class="btn btn-danger" onclick="DeletePopup('Delete',@item.ShopUserId)" title="remove this customer"> <span class="glyphicon glyphicon-remove"> </span></button>
+                           }
+                           else
+                           {
+                            <button class="btn btn-primary" onclick="EditPopup(this, 'Edit', @item.Id)" title="edit"> <span class="glyphicon glyphicon-edit"> </span></button>
+                            <button class="btn btn-danger" onclick="DeletePopup('Delete',@item.ShopUserId)" title="remove this customer"> <span class="glyphicon glyphicon-remove"> </span></button>
+                           }
+
+                       }                                                      
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+
+    @Html.PagedListPager(Model, page => Url.Action("Index", new { page, sortOrder = ViewBag.CurrentSort, ViewBag.CurrentFilter }))
+</div>
+
+<div id="myDeletePopup" class="popup">
+    <div class="popup-content">
+        <div class="popup-header">
+            <span id="span-close-delete" class="close">&times;</span>
+            <h2 id="hd-popup-content-delete"></h2>
+
+        </div>
+
+        <p id="bd-popup-content-delete" style="padding:20px;text-align:center;">
+            Some text in the Modal..
+        </p>
+
+        <div style="text-align:center;padding-bottom:20px;">
+            <button class="btn btn-success" id="btn-ok-delete"> Ok </button>
+            <button class="btn btn-danger" id="btn-cancel-delete"> Cancel </button>
+        </div>
+    </div>
+</div>
+
+<div id="myUpdatePopup" class="popup">
+    <div class="popup-content">
+        <div class="popup-header">
+            <span id="span-close-update" class="close">&times;</span>
+            <h2 id="hd-popup-content-update"></h2>
+
+        </div>
+
+        <p id="bd-popup-content-delete" style="padding:20px;text-align:center;">
+            Some text in the Modal..
+        </p>
+
+        <div style="text-align:center;padding-bottom:20px;">
+            <button class="btn btn-success" id="btn-ok-update"> Ok </button>
+            <button class="btn btn-danger" id="btn-cancel-update"> Cancel </button>
+        </div>
+    </div>
+</div>
+
+<div id="myPopup" class="popup">
+    <div class="popup-content">
+        <div class="popup-header">
+            <span id="span-close-popup" class="close">&times;</span>
+            <h2 id="hd-popup-content"></h2>
+
+        </div>
+
+        <div class="popup-body" id="UserPopup">
+
+        </div>
+
+
+    </div>
+</div>
+
+<div id="myDetailPopup" class="popup">
+    <div class="popup-content">
+        <div class="popup-header">
+            <span id="span-close-detail" class="close">&times;</span>
+            <h2 id="hd-popup-content-detail"></h2>
+
+        </div>
+    
+        <div class="popup-body" id="DetailPopup">
+
+        </div>
+
+
+    </div>
+</div>
+
+
+<script>
+    function mySearch() {
+            var searchTerm = $("#search-text").val();
+            var listItem = $('.results tbody').children('tr');
+            var searchSplit = searchTerm.replace(/ /g, "'):containsi('")
+
+            $.extend($.expr[':'], {
+                'containsi': function (elem, i, match, array) {
+                    return (elem.textContent || elem.innerText || '').toLowerCase().indexOf((match[3] || "").toLowerCase()) >= 0;
+                }
+            });
+
+            $(".results tbody tr").not(":containsi('" + searchSplit + "')").each(function (e) {
+                $(this).attr('visible', 'false');
+            });
+
+            $(".results tbody tr:containsi('" + searchSplit + "')").each(function (e) {
+                $(this).attr('visible', 'true');
+            });
+
+            var jobCount = $('.results tbody tr[visible="true"]').length;
+            $('.counter').text(jobCount + ' item');
+    }
+</script>
+<script src="~/Scripts/User.js"></script>
+
+
+

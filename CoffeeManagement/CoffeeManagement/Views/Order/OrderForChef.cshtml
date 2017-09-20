@@ -1,0 +1,62 @@
+﻿
+@{
+    ViewBag.Title = "OrderForChef";
+    Layout = "~/Views/Shared/_HomeLayout.cshtml";
+}
+<style>
+    #SELECT_1 {
+        background-position: 92% 50%;
+        height: 40px;
+        vertical-align: middle;
+        width: 160px;
+        -webkit-appearance: none;
+        -webkit-background-clip: padding-box;
+        -webkit-perspective-origin: 80px 20px;
+        -webkit-transform-origin: 80px 20px;
+        /*background: rgb(255, 255, 255) url(http://dominiquedecooman.com/sites/all/themes/ddc/images/select-arrow.png) no-repeat scroll 92% 50% / auto padding-box padding-box;*/
+        border: 3px solid rgb(239, 239, 239);
+        font: normal normal normal 13px/normal Arial, sans-serif;
+        margin: 0px;
+        padding: 5px 25px 5px 15px;
+    }
+</style>
+
+<link href="~/Content/OrderProduct.css" rel="stylesheet" />
+
+@model List<CoffeeManagement.Models.ViewModel.OrderViewModel>
+
+<div class="container-fluid animate-bottom" id="myDiv" style="display: block">
+    <table class="table table-hover animate-bottom" id="table">
+        <thead>
+        <tr class="headertable">
+            <th style="text-align: center;vertical-align: middle;">Bàn</th>
+            <th>
+                <span>Món</span>
+                <select id="SELECT_1" >
+                    <option selected="selected">
+                        20
+                    </option> 
+                    <option>
+                        30
+                    </option> 
+                    <option>
+                        45
+                    </option> 
+                    <option>
+                        100
+                    </option> 
+                </select>
+            </th>
+        </tr>
+        </thead>
+        <tbody id="tbodyitem">
+
+        @if (Model != null)
+        {
+            @Html.Partial("PartialListOrder", Model)
+        }
+        </tbody>
+    </table>
+</div>
+
+<script src="~/Scripts/javascript/OrderProduct4Chef.js"></script>

@@ -1,0 +1,68 @@
+﻿@model List<CoffeeManagement.Models.ViewModel.OrderViewModel>
+@{
+    Layout = null;
+}
+
+
+@Html.Action("PartialListOrder", "Order", new { listOrder = Model })
+
+
+<script>
+    $(".dropcontent li").each(function() {
+        $(this).off("click");
+    });
+    $(".itemli").each(function () {
+        $(this).off("click");
+    });
+
+    $(".dropcontent li").on("click", function () {
+        swapStatus(this);
+    });
+    window.onclick = function (event) { showof(event); }
+
+    $(".itemli").on("click",function () {
+        var es = $(this).closest(".tditem");
+        var flag = true;
+        //var count = $(es).find(".item").length;
+        var lstitem = $(".col").last().find("span.idorder").text().trim();
+        $(es).find(".item").each(function () {
+            var e = $(this).find(".istatus");
+            console.log($(e).text().trim());
+            if ($(e).text().trim() === "Đang Làm" || $(e).text().trim() === "Chưa Làm") {
+                flag = false;
+                return flag;
+            }
+        });
+        
+        if (flag === true) {
+            var ffff = $(this).closest(".col").find(".item").length;
+            $(this).closest(".col").hide(1000);
+            var fff=0;
+            var ss = $(".col").each(function() {
+                if ($(this).css('display') !== 'none') {
+                    var ittem = $(this).find(".item").length;
+                    fff = fff + ittem;
+                    console.log(ittem);
+                }
+            });
+
+            fff = fff - ffff;
+            var sNumberOfItem = $("#SELECT_1").val().trim();
+            var count = sNumberOfItem - fff;
+            count = Math.abs(count);
+            if (fff <= sNumberOfItem) {
+                $.ajax({
+                    type: "GET",
+                    url: "/Order/PartialUpdateTable",
+                    contentType: "application/json; Charset:utf-8",
+                    data: { count: count, id: lstitem, index:1 },
+                    success: function (result) {
+                        $("#tbodyitem").append(result);
+                        autochangeColor();
+                    }
+                });
+            }
+        }
+    });
+    autochangeIconStatus();
+</script>

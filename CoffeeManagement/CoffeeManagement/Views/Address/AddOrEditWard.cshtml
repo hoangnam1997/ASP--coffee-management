@@ -1,0 +1,174 @@
+﻿@using CoffeeManagement.Models
+@model CoffeeManagement.Models.WardViewModel
+@{
+    Layout = null;
+}
+<div class="modal-dialog" role="document">
+    <div class="modal-content">
+        <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close" onclick="cancleUpdate()"><span aria-hidden="true">&times;</span></button>
+            <h4 class="modal-title" id="gridSystemModalLabel">Detail</h4>
+        </div>
+        <div class="modal-body">
+            <form>
+                <div class="form-group">
+                    @Html.HiddenFor(x => x.Id)
+                    @Html.LabelFor(x => x.WardName)
+                    @Html.TextBoxFor(x => x.WardName, new {@class = "form-control"})
+                </div>
+                @*Show city selection*@
+                <div class="form-group">
+                    @Html.LabelFor(x => x.CityName)
+                    <select id="CityName" name="CityName" onchange="getDistrict()" class="form-control">
+                        @if (ViewBag.Cities != null)
+                        {
+                            foreach (var city in (ViewBag.Cities as List<City>))
+                            {
+                                <option value="@city.ID">@city.Name</option>
+                            }
+                        }
+                    </select>
+                    @*show default value on dropdown*@
+                    @if (Model != null)
+                    {
+                        <script>
+                            $('#CityName option').each(function() {
+                                if ($(this).attr('value') == @Model.CityId) {
+                                    $(this).attr('selected', 'true');
+                                }
+                            })
+                        </script>
+                    }
+                </div>
+                @*Show district selection*@
+                <div class="form-group">
+                    @Html.LabelFor(x => x.DistrictName)
+                    <select id="DistrictName" name="DistrictName" class="form-control">
+                        @if (ViewBag.Districts != null)
+                        {
+                            foreach (var district in (ViewBag.Districts as List<District>))
+                            {
+                                <option value="@district.ID">@district.Name</option>
+                            }
+                        }
+                    </select>
+                    @*show default value on dropdown*@
+                    @if (Model != null)
+                    {
+                        <script>
+                            $('#DistrictName option').each(function () {
+                                if ($(this).attr('value') == @Model.DistrictId) {
+                                    $(this).attr('selected', 'true');
+                                }
+                            })
+                        </script>
+                    }
+                </div>
+            </form>
+        </div>
+        <div class="modal-footer">
+            <button type="button" class="btn btn-default" id="btnClose" data-dismiss="modal" onclick="cancleUpdate()">Close</button>
+            <button type="button" class="btn btn-primary" id="btnSave" onclick="saveChanges()">Save changes</button>
+        </div>
+    </div><!-- /.modal-content -->
+</div><!-- /.modal-dialog -->
+
+<script>
+    //get district by cityid
+    function getDistrict() {
+        //get city id
+        var cityId = $('#CityName option:selected').val();
+        $.ajax({
+            type: "GET",
+            url: "/address/GetDistricts?cityId=" + cityId,
+            success: function (data, textStatus, jqXHR) {
+                if (jqXHR.status == 200) {
+                    //set option for district
+                    //clear option
+                    $('#DistrictName').html("");
+                    //add new option
+                    for (var i = 0; i < data.length; i++) {
+                        $('#DistrictName').append("<option value='" + data[i].ID + "'>" + data[i].Name + "</option>");
+                    }
+                } else {
+                    console.log(jqXHR);
+                    alert(textStatus);
+                }
+
+            },
+            error: function (jqXHR, textStatus, errorThrown) {
+                alert(textStatus);
+            }
+        });
+    }
+
+    //save change
+    function saveChanges() {
+
+        //get data
+        var dataObject = {
+            'Id': $('#Id').val(),
+            'WardName': $('#WardName').val(),
+            'DistrictId': $('#DistrictName option:selected').val(),
+            'DistrictName': $('#DistrictName option:selected').text(),
+            'CityId': $('#CityName option:selected').val(),
+            'CityName': $('#CityName option:selected').text()
+        };
+
+        //update
+        $.ajax({
+            type: "POST",
+            url: "/address/UpdateWard",
+            data: JSON.stringify(dataObject),
+            contentType: "application/json; charset=utf-8",
+            success: function (result, textStatus, jqXHR) {
+                if (jqXHR.status == 200) {
+                    if (result.Status == "error") {
+                        alert(result.Data);
+                    } else {
+                        //close popup
+                        $('#popup').modal('hide');
+                        //If id is empty then handle add action, else handle Edit action
+                        var id = $("#Id").val();
+                        if (id != "") {
+                            //edit 
+                            updateItemInListRowTable("Id", id, result.Data);
+                        } else {
+                            //add
+                            addListRowTable(result.Data);
+                        }
+                    }
+                } else {
+                    alert(textStatus);
+                }
+            },
+            error: function (jqXHR, textStatus, errorThrown) {
+                alert(errorThrown);
+            }
+        });
+    }
+</script>
+
+@*cancle update*@
+@if (@Model != null)
+{
+    <script>
+        function cancleUpdate() {
+            var data = {
+                Id: @Model.Id,
+                WardName: '@Model.WardName',
+                DistrictId: @Model.DistrictId,
+                DistrictName: '@Model.DistrictName',
+                CityId: @Model.CityId,
+                CityName: '@Model.CityName'
+            };
+            tableAddRow(data, $("#statisticsTable tbody"));
+        }
+    </script>
+}
+else
+{
+    <script>
+        function cancleUpdate() { }
+    </script>
+}

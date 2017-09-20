@@ -1,0 +1,58 @@
+﻿@using CoffeeManagement.Models
+@model IEnumerable<Shop>
+@{
+    ViewBag.Title = "AddShop";
+}
+
+<div class="modal fade" id="addShopModal" role="dialog">
+
+    <div class="modal-dialog">
+
+        <!-- Modal content-->
+        <div class="modal-content">
+            <form method="post" action="javascript:saveChanges()">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    <h4 class="modal-title">Add new shop</h4>
+                </div>
+                <div class="modal-body ward-district-city">
+                    <div class="form-group" id="shopNameDiv">
+                        <label for="shopName">Shop name</label>
+                        <input type="text" class="form-control" id="shopName" required>
+                    </div>
+                    <div class="form-group" id="detailAddressDiv">
+                        <label for="detailAddress">Detail Address</label>
+                        <input type="text" class="form-control" id="detailAddress" required>
+                    </div>
+                    <div class="form-group city" id="city">
+                        <label for="City">City</label>
+                        <select class="form-control" id="cmbCity" required>
+                            <option value="">-- Chọn thành phố --</option>
+                            @foreach (var city in @ViewData["cities"] as IEnumerable<City>)
+                            {
+                                <option value="@city.ID">@city.Name</option>
+                            }
+                        </select>
+                    </div>
+                    <div class="form-group district" id="district">
+                        <label for="District">District</label>
+                        <select class="form-control" id="cmbDistrict" required disabled></select>
+                    </div>
+                    <div class="form-group ward" id="ward">
+                        <label for="Ward">Ward</label>
+                        <select class="form-control" id="cmbWard" required disabled></select>
+                    </div>
+                    <div class="form-group" id="wardDescription">
+                        <label for="wardDescription">Description</label>
+                        <input type="text" class="form-control" id="description">
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" id="closeButton" class="btn btn-default" data-dismiss="modal">Close</button>
+                    <input type="submit" id="saveButton" class="btn btn-success" value="Add" />
+                </div>
+            </form>
+        </div>
+    </div>
+
+</div>

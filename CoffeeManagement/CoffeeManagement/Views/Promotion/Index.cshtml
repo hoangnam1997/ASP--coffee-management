@@ -1,0 +1,185 @@
+﻿@using CoffeeManagement.Models;
+@model List<Promotion>
+@{
+    ViewBag.Title = "Index";
+}
+
+<html>
+
+<head>
+
+    <link rel="stylesheet" href="~/Content/PromotionContent/Promotion.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+
+    <script type="text/javascript" src="~/Scripts/PromotionScripts/Promotion.js"></script>
+    
+    <script>
+        // Thực hiện load danh sách khuyến mãi từ Model vào List, để thực hiện phân trang và tìm kiếm
+        var currentShopID =  @ViewData["ShopID"].ToString(); // ShopID sẽ đc get lúc đăng nhập thành công từ Home Controller
+        var lst = [];
+        @foreach (var item in Model)
+        {
+            <text>
+
+        lst.push({
+                "No": lst.length + 1,
+                "ID": "@item.ID",
+                "Name": "@(new HtmlString(@item.Name))",
+                "Discount": "@(new HtmlString(@item.Discount.ToString()))",
+                "BasePurchase": "@(new HtmlString(@item.BasePurchase.ToString()))",
+                "StartDate": "@(new HtmlString(@item.StartDate.Value.ToString("dd/MM/yyyy")))",
+                "EndDate": "@( new HtmlString( (@item.EndDate.HasValue) ?  @item.EndDate.Value.ToString("dd/MM/yyyy"): "Đến nay" ))",
+                "Description": "@(new HtmlString(@item.Description))",
+               });
+            </text>
+
+        }
+
+    </script>
+    <script type="text/javascript" src="~/Scripts/PromotionScripts/pagination.js"></script>
+
+
+    <meta charset="utf-8">
+    <title>Shop Management</title>
+
+</head>
+
+
+<body>
+
+    <!-- bootstrap myModal-->
+
+    <div class="modal" id="myModal" role="dialog">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content" style="width:500px">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title">Promotion info</h4>
+                </div>
+
+                <form id="fmInfoPromotion" style="width:400px; margin-left:  35px">
+                    <div class="modal-body">
+                        <div class="form-group">
+                            <label>Name: </label>
+                            <div class="input-group">
+                                <span class="input-group-addon"><i class="glyphicon glyphicon-user"></i></span>
+                                <input type="text" name="txtName" id="txtName" class="form-control" placeholder="input name Promotion" required />
+                            </div>
+                        </div>
+                        <!-- Required Yêu cầu nhập-->
+
+                        <div class="form-group">
+                            <label>Discount: </label>
+                            <div class="input-group">
+                                <span class="input-group-addon"><i class="  glyphicon glyphicon-download-alt"></i></span>
+                                <input onfocus="this.type='number'" name="nDiscount" id="nDiscount" class="form-control" placeholder="input (0-100)% Discount" min="0" max="100" required />
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label>BasePurchase: </label>
+                            <div class="input-group">
+                                <span class="input-group-addon"><i class="glyphicon glyphicon-usd"></i></span>
+                                <input onfocus="this.type='number'" name="nBasePurchase" id="nBasePurchase" class="form-control" placeholder="input BasePurchase" min="0" required />
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label>Start Date: </label>
+                            <div class="input-group">
+                                <span class="input-group-addon"><i class="glyphicon glyphicon-calendar"></i></span>
+                                <input type="date" name="dtStartDate" id="dtStartDate" class="form-control" onchange="SetEndDate()" required />
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label>End Date: </label>
+                            <div class="input-group">
+                                <span class="input-group-addon"><i class="glyphicon glyphicon-calendar"></i></span>
+                                <input type="date" name="dtEndDate" id="dtEndDate" class="form-control" />
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="comment">Description: </label>
+                            <div class="input-group">
+                                <span class="input-group-addon"><i class="glyphicon glyphicon-comment"></i></span>
+                                <textarea class="form-control" rows="5" id="txtDescription" placeholder="Comment..."> </textarea>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="submit" id="btnAddUpdate" class="btn btn-default">Update</button>
+                        <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+                    </div>
+                </form>
+            </div>
+            <!--.modal-content -->
+        </div>
+        <!-- /.modal-dialog -->
+    </div>
+    <!-- /.modal -->
+    <!-- Search bar -->
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-sm-4 pull-right">
+                <div class="input-group search-pagination">
+                    <input type="text" id="txtSearch" class="form-control" onkeyup="searchEnter(event)" placeholder="Search for...">
+                    <span class="input-group-btn">
+                        <button type="button" id="btnSearch" class="btn btn-default" onclick="searchFunct();">Search</button>
+                    </span>
+                </div>
+                <!-- /input-group -->
+            </div>
+            <!-- /.col-sm-6 -->
+        </div> <br>
+        <!-- TABLE -->
+        <div class="panel panel-default">
+            <!-- Default panel contents -->
+            <div class="panel-heading">
+
+                <button type="button" id="btnAdd" class="btn btn-default" data-toggle="modal" data-target="#myModal" onclick="reSetAllText();"><i class="glyphicon glyphicon-plus-sign"></i></button>
+
+                <div class="dropdown pull-right">
+                    <button class="btn btn-default dropdown-toggle" type="button" id="selectedDropdownItem" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+                        Show 5 entries
+                        <span class="caret"></span>
+                    </button>
+                    <ul class="dropdown-menu pagination-page-size" aria-labelledby="dropdownMenu1">
+                        <li data-page-size="5"><a value="5">Show 5 entries</a></li>
+                        <li data-page-size="10"><a value="10">Show 10 entries</a></li>
+                        <li data-page-size="15"><a value="15">Show 15 entries</a></li>
+                    </ul>
+                </div>
+            </div>
+            <!-- Table -->
+            <table class="table table-bordered results table-hover table-pagination table-sort-pagination" id="tblListPromotion">
+                <thead>
+                    <tr>
+                        <th>No</th>
+                        <th>Name</th>
+                        <th>DisCount</th>
+                        <th>BasePurchase</th>
+                        <th>StartDate</th>
+                        <th>EndDate</th>
+                        <!--ShopID-->
+                        <th>Description</th>
+                        <th>Action</th>
+                    </tr>
+                    <tr class="warning no-result" hidden="hidden">
+                        <td colspan="8"><i class="fa fa-warning"></i> No result</td>
+                    </tr>
+                </thead>
+                <tbody></tbody>
+
+            </table>
+        </div>
+        <div class="pull-right page-pagination"></div>
+
+    </div>
+</body>
+
+</html>
+
+
+

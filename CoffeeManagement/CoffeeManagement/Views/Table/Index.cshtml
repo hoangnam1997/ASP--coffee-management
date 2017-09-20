@@ -1,0 +1,173 @@
+﻿@using CoffeeManagement.Models;
+
+@model List<Table>
+
+@{
+    ViewBag.Title = "Index";
+}
+
+    <meta charset="utf-8">
+
+    <link rel="stylesheet" href="~/Content/TableContent/main.css">
+    
+    <script type="text/javascript" src="~/Scripts/TableScripts/pagination.js"></script>
+    <script type="text/javascript" src="~/Scripts/TableScripts/TableScript.js"></script>
+
+    <script>
+        var CurrentShopID = @ViewData["ShopID"].ToString();
+
+        var lst = [];
+
+        // Thực hiện load danh sách table vào lst để phân trang và sắp xếp.
+        @foreach (var item in Model)
+        {
+            <text>
+            lst.push(
+                {
+                    "No" : lst.length + 1,
+                    "ID" : "@(new HtmlString(@item.ID.ToString()))",
+                    "Name" : "@(new HtmlString(@item.Name))",
+                    "GroupTableID": "@(new HtmlString(@item.GroupTableID.ToString()))",
+                    "GroupTableName" : "@(new HtmlString(@item.GroupTable.Name))",
+                    "Description" : "@(new HtmlString(@item.Description))"
+                });
+            </text>
+        }
+    </script>
+
+    <div style="height:10px"></div>
+    <!-- Modal -->
+    <div class="modal fade" id="myModal" role="dialog">
+        <div class="modal-dialog modal-lg" style="width:405px">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    <h4 class="modal-title">Table Info</h4>
+                </div>
+
+                <form name="fmInfoTable" id="fmInfoTable">
+                    <div class="modal-body" style="width: 400px">
+                        <div class="form-group">
+                            <label>Name: </label>
+                            <div class="input-group">
+                                <span class="input-group-addon"><i class="glyphicon glyphicon-user"></i></span>
+                                <input type="text" name="txtName" id="txtName" placeholder="Input name" class="form-control">
+                            </div>
+                        </div>
+
+
+                        <div class="form-group">
+                            <label>Group table: </label>
+                            <div class="input-group">
+                                <span class="input-group-addon"><i class="glyphicon glyphicon-list"></i></span>
+                                <select name="sltGroupTable" id="sltGroupTable" class="form-control">
+                                    <option value="">--Please choose group table--</option>
+                                    @foreach (GroupTable item in ViewData["ListGroupTable"] as List<GroupTable>)
+                                    {
+                                        <option value="@item.ID">@item.Name</option>
+                                    }
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="comment">Description: </label>
+                            <div class="input-group">
+                                <span class="input-group-addon"><i class="glyphicon glyphicon-comment"></i></span>
+                                <textarea class="form-control" rows="8" id="txtDescription" name="txtDescription" placeholder="Input description"></textarea>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="modal-footer">
+                        <button id="btnUpdateTable" name="btnUpdateTable" type="submit" class="btn btn-default">Update</button>
+                        <button id="btnCancel" type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    <!-- End Modal data-dismiss="modal" -->
+    <!-- Search bar -->
+    <div class="container-fluid">
+        <div class="row">
+            <button type="submit" class="btn btn-primary col-sm-1" style="margin-right:1%" onclick="showAdvance()">Nâng cao</button>
+            <div class="col-sm-1 loader" style="display:none"></div>
+            <div class="col-sm-4 pull-right">
+                <div class="input-group search-pagination">
+                    <input type="text" id="txtSearch" class="form-control" placeholder="Search for...">
+                    <span class="input-group-btn">
+                        <button id="btnSearch" class="btn btn-default" type="button">
+                            <i class="glyphicon glyphicon-search" style="width:43.95px"></i>
+                        </button>
+                    </span>
+                </div><!-- /input-group -->
+            </div><!-- /.col-sm-6 -->
+        </div> <br>
+        <!-- TABLE -->
+        <div class="panel panel-default">
+            <!-- Default panel contents -->
+            <div class="panel-heading">
+                <button type="button" data-toggle="modal" data-target="#myModal" class="btn btn-default" onclick="ResetAllText();">
+                    <i class="glyphicon glyphicon-plus-sign"></i>
+                </button>
+                <div class="dropdown pull-right">
+                    <button class="btn btn-default dropdown-toggle" type="button" id="selectedDropdownItem" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+                        Show 5 entries
+                        <span class="caret"></span>
+                    </button>
+                    <ul class="dropdown-menu pagination-page-size" aria-labelledby="dropdownMenu1">
+                        <li data-page-size="5"><a value="5">Show 5 entries</a></li>
+                        <li data-page-size="10"><a value="10">Show 10 entries</a></li>
+                        <li data-page-size="15"><a value="15">Show 15 entries</a></li>
+                    </ul>
+                </div>
+            </div>
+            <!-- Table -->
+            <table class="table results table-hover table-striped table-bordered table-pagination table-sort-pagination" id="tblListTable">
+                <thead>
+                    <tr>
+                        <th data-sort-column="No">ID</th>
+                        <th data-sort-column="Name">Name</th>
+                        <th data-sort-column="GroupTableID">Group Table ID</th>
+                        <th>Description</th>
+                        <th></th>
+                    </tr>
+                    <tr class="warning no-result">
+                        <td colspan="6"><i class="fa fa-warning"></i> No result</td>
+                    </tr>
+                </thead>
+
+                <tbody>
+                    @{ int i = 1;
+                        
+                        // Thực hiện load danh sách table lên giao diện.
+                        foreach (Table item in Model)
+                        {
+                            <tr>
+                                <td title="@item.ID">@i</td>
+                                <td>@item.Name</td>
+                                <td title="@item.GroupTableID">@item.GroupTable.Name</td>
+                                <td>@item.Description</td>
+                                <td>
+                                    <button type="button" class="btn btn-info" data-toggle="modal" data-target="#myModal" onclick="LoadInfo(this);">
+                                        <i class="glyphicon glyphicon-edit" style="width:30px"></i>
+                                    </button>
+                                    <button type="button" class="btn btn-danger" onclick="DeleteRow(this);">
+                                        <i class="glyphicon glyphicon-remove-circle" style="width:30px"></i>
+                                    </button>
+                                </td>
+                            </tr>
+
+                            i++;
+                        }
+                    }
+
+                </tbody>
+            </table>
+        </div>
+        <!-- Phân trang -->
+        <div class="pull-right page-pagination"></div>
+    </div>
+
+

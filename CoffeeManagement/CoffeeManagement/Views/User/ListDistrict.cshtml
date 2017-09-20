@@ -1,0 +1,9 @@
+﻿@{
+    Layout = null;
+}
+
+@foreach (var item in ViewBag.ListDistrict)
+{
+    <option value="@item.ID"> @item.Name </option>
+}
+

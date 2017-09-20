@@ -1,0 +1,95 @@
+﻿@model PagedList.IPagedList<CoffeeManagement.Models.ViewModel.CustomerShopViewModel>
+@using PagedList.Mvc;
+
+
+@{
+    Layout = null;
+}
+<table class="table table-bordered results">
+    <thead class="th-bg">
+        <tr>
+            <th>
+                @Html.ActionLink("Name", "Index", new { sortOrder = ViewBag.NameSortParm })
+            </th>
+            <th>
+                Email
+            </th>
+
+            <th>
+                Sex
+            </th>
+
+            <th>
+                @Html.ActionLink("BirthDay", "Index", new { sortOrder = ViewBag.DateSortParm })
+            </th>
+
+            <th>
+                PhoneNumber
+            </th>
+
+            <th>
+                Shop
+            </th>
+
+            <th>
+                Action
+            </th>
+        </tr>
+    </thead>
+    <tbody class="tr-bg">
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @item.Name
+                </td>
+
+                <td>
+                    @item.Email
+                </td>
+
+                <td>
+                    @item.Sex
+                </td>
+
+                <td>
+                    @item.BirthDay.Value.ToString("yyyy-MM-dd")
+                </td>
+
+                <td>
+                    @item.PhoneNumber
+                </td>
+                <td>
+                    @item.ShopName
+                </td>
+
+                <td>
+                    <button class="btn btn-default" onclick="DetailPopup('Detail', @item.Id)" title="detail"> <span class="glyphicon glyphicon-eye-open"> </span></button>
+                    @if (item.ShopId == null)
+                    {
+                        <button class="btn btn-primary" onclick="EditPopup(this, 'Edit', @item.Id)" title="edit"> <span class="glyphicon glyphicon-edit"> </span></button>
+                    }
+                    else
+                    {
+                        if (item.ShopId == 0)
+                        {
+                            <button class="btn btn-primary" onclick="EditPopup(this, 'Edit', @item.Id)" title="edit"> <span class="glyphicon glyphicon-edit"> </span></button>
+                            <button class="btn btn-danger" onclick="DeletePopup('Delete',@item.ShopUserId)" title="remove this customer"> <span class="glyphicon glyphicon-remove"> </span></button>
+                        }
+                        else
+                        {
+                            <button class="btn btn-primary" onclick="EditPopup(this, 'Edit', @item.Id)" title="edit"> <span class="glyphicon glyphicon-edit"> </span></button>
+                            <button class="btn btn-danger" onclick="DeletePopup('Delete',@item.ShopUserId)" title="remove this customer"> <span class="glyphicon glyphicon-remove"> </span></button>
+                        }
+
+                    }
+                    
+                   
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+@Html.PagedListPager(Model, page => Url.Action("Index", new { page, sortOrder = ViewBag.CurrentSort, ViewBag.CurrentFilter }))
+
+

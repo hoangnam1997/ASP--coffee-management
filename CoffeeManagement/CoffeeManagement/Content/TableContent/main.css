@@ -1,0 +1,63 @@
+.results tr[visible='false'],
+.no-result{
+  display:none;
+}
+
+.results tr[visible='true']{
+  display:table-row;
+}
+
+.counter{
+  padding:8px; 
+  color:#ccc;
+}
+
+#tblListTable td, th {
+    text-align: center;
+}
+
+i.unsort {
+    background: url(../../fonts/unsort-up.png), url(../../fonts/unsort-down.png);
+    background-repeat: no-repeat;
+    background-size: 75%;
+    background-position: top right, bottom right;
+    text-align: center;
+    width: 15px;
+    height: 19px;
+    float: right;
+}
+
+i.sort-asc {
+    background: url(../../fonts/sort-up.png);
+    background-repeat: no-repeat;
+    background-size: 75%;
+    background-position: top right;
+    text-align: center;
+    width: 15px;
+    height: 19px;
+    float: right;
+}
+
+i.sort-desc {
+    background: url(../../fonts/sort-down.png);
+    background-repeat: no-repeat;
+    background-size: 75%;
+    background-position: bottom right;
+    text-align: center;
+    width: 15px;
+    height: 19px;
+    float: right;
+}
+
+.input-group-btn .btn {
+    border-width:1px;
+    padding:6px 16px;
+}
+
+.page-pagination li a {
+    cursor: pointer;
+}
+
+.table-sort-pagination th {
+    cursor: pointer;
+}

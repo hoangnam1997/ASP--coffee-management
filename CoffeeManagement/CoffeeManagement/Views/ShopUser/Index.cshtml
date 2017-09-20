@@ -1,0 +1,256 @@
+﻿@using CoffeeManagement.Models;
+@model List<AspNetUserRoles>
+@{
+    ViewBag.Title = "Index";
+}
+
+<style>
+    i.unsort {
+    background: url(../../fonts/unsort-up.png), url(../../fonts/unsort-down.png);
+    background-repeat: no-repeat;
+    background-size: 75%;
+    background-position: top right, bottom right;
+    text-align: center;
+    width: 15px;
+    height: 19px;
+    float: right;
+}
+
+i.sort-asc {
+    background: url(../../fonts/sort-up.png);
+    background-repeat: no-repeat;
+    background-size: 75%;
+    background-position: top right;
+    text-align: center;
+    width: 15px;
+    height: 19px;
+    float: right;
+}
+
+i.sort-desc {
+    background: url(../../fonts/sort-down.png);
+    background-repeat: no-repeat;
+    background-size: 75%;
+    background-position: bottom right;
+    text-align: center;
+    width: 15px;
+    height: 19px;
+    float: right;
+}
+
+.input-group-btn .btn {
+    border-width:1px;
+    padding:6px 16px;
+}
+
+.page-pagination li a {
+    cursor: pointer;
+}
+
+.table-sort-pagination th {
+    cursor: pointer;
+}
+</style>
+
+<script src="~/Scripts/ShopUserScipts/pagination.js" type="text/javascript"></script>
+<script src="~/Scripts/ShopUserScipts/ShopScript.js" type="text/javascript"></script>
+@*<script src="~/Scripts/statisticScript/StatisticsTable.js"></script>*@
+<script>
+        var lst = [];
+
+        // Thực hiện load danh sách table vào lst để phân trang và sắp xếp.
+        @foreach (var item in Model)
+        {
+            <text>
+            lst.push(
+                {
+                    "No" : lst.length + 1,
+                    "ID" : "@(new HtmlString(@item.Id.ToString()))",
+                    "Name" : "@(new HtmlString(@item.AspNetUsers.Name))",
+                    "BirthDay": "@(new HtmlString(@item.AspNetUsers.BirthDay.ToString()))",
+                    "Sex": "@(new HtmlString(@item.AspNetUsers.Sex))",
+                    "Identity": "@(new HtmlString(@item.AspNetUsers.Identity))",
+                    "Role": "@(new HtmlString(@item.AspNetRoles.Name))",
+                    "PhoneNumber": "@(new HtmlString(@item.AspNetUsers.PhoneNumber))",
+                    "Email": "@(new HtmlString(@item.AspNetUsers.Email))",
+                    "Shop": "@(new HtmlString(@item.Shop.Name))",
+                    "Ward": "@(new HtmlString(@item.AspNetUsers.Ward.Name))",
+                    "District": "@(new HtmlString(@item.AspNetUsers.Ward.District.Name))",
+                    "City": "@(new HtmlString(@item.AspNetUsers.Ward.District.City.Name))",
+                    "Description": "@(new HtmlString(@item.AspNetUsers.Description))",
+                    "DetailAddress": "@(new HtmlString(@item.AspNetUsers.DetailAddress))"
+                });
+            </text>
+        }
+</script>
+
+
+    <!-- Navigation bar -->
+    <!-- Search bar -->
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-sm-4 pull-right">
+                <div class="input-group search-pagination">
+                    <input type="text" class="form-control" id="txtSearch" placeholder="Search for...">
+                    <span class="input-group-btn">
+                        <button class="btn btn-default" type="button" id="btnSearch">Search</button>
+                    </span>
+                </div><!-- /input-group -->
+            </div><!-- /.col-sm-6 -->
+        </div> <br>
+    </div>
+    <!-- TABLE -->
+    <div class="panel panel-default">
+        <!-- Default panel contents -->
+        <div class="panel-heading">
+            <a class="btn btn-default" href='/ShopUser/Register'>
+                <i class="glyphicon glyphicon-plus-sign"></i>
+            </a>
+        </div>
+        <!-- Table -->
+        <table class="table table-hover table-striped table-bordered table-pagination table-sort-pagination" id="tblTableList">
+            <thead>
+                <tr>
+                    <th data-sort-column="No">ID</th>
+                    <th data-sort-column="Name">Name</th>
+                    <th hidden="hidden">Birthday</th>
+                    <th data-sort-column="Sex">Sex</th>
+                    <th hidden="hidden">Identity</th>
+                    <th data-sort-column="Role">Role</th>
+                    <th hidden="hidden">PhoneNumber</th>
+                    <th data-sort-column="Email">Email</th>
+                    <th data-sort-column="Shop">Shop</th>
+                    <th data-sort-column="Ward">Ward</th>
+                    <th data-sort-column="District">District</th>
+                    <th data-sort-column="City">City</th>
+                    <th hidden="hidden">Description</th>
+                    <th hidden="hidden">Detail Address</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                @{ 
+                    int i = 1;
+                    foreach (var item in Model)
+                    {
+                        <tr>
+                            <td title="@item.Id">@i</td>
+                            <td>@item.AspNetUsers.Name</td>
+                            <td hidden="hidden">@item.AspNetUsers.BirthDay</td>
+                            <td>@item.AspNetUsers.Sex</td>
+                            <td hidden="hidden">@item.AspNetUsers.Identity</td>
+                            <td>@item.AspNetRoles.Name</td>
+                            <td hidden="hidden">@item.AspNetUsers.PhoneNumber</td>
+                            <td>@item.AspNetUsers.Email</td>
+                            <td>@item.Shop.Name</td>
+                            <td>@item.AspNetUsers.Ward.Name</td>
+                            <td>@item.AspNetUsers.Ward.District.Name</td>
+                            <td>@item.AspNetUsers.Ward.District.City.Name</td>
+                            <td hidden="hidden">@item.AspNetUsers.Description</td>
+                            <td hidden="hidden">@item.AspNetUsers.DetailAddress</td>
+                            <td>
+                                <button type="button" class="btn btn-info" data-toggle="modal" data-target="#modal_update" aria-label="Left Align" onclick="LoadInfo(this);">
+                                    <span class="glyphicon glyphicon-edit" aria-hidden="true"></span>
+                                </button>
+                                <button type='button' class='btn btn-danger' data-toggle='modal' data-target='#modal_remove' onclick="SetCurrentRow(this);">
+                                    <span class="glyphicon glyphicon-remove-sign" aria-hidden="true"></span>
+                                </button>
+                            </td>
+                        </tr>
+
+                        i++; 
+                    }
+                    }
+            </tbody>
+        </table>
+    </div>
+    <!-- Modal Delete -->
+    <div class="modal fade" id="modal_remove" role="dialog">
+        <div class="modal-dialog">
+            <!-- Modal content-->
+            <form id="formDel">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal">&times;</button>
+                        <h4 class="modal-title">Delete Employee</h4>
+                    </div>
+                    <div class="modal-body">
+                        <p align=center>You really want to delete </p>
+                        <p align=center>
+                            <button type="button" class="btn btn-info" data-toggle="modal"data-dismiss="modal">No</button>
+                            @*<button type="button" class="btn btn-info" data-toggle="modal">Yes</button>*@
+                            <button class="btn btn-danger" type="button" id="btnDel" onclick="DeleteRow();">Yes</button>
+                        </p>
+                    </div>
+                </div>
+                </form>
+        </div>
+    </div>
+    <!-- Modal Update Employee -->
+        <div class="modal fade" id="modal_update" role="dialog">
+            <div class="modal-dialog">
+                <!-- Modal content-->
+                <form id="formUpdate" name="formUpdate">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <button type="button" class="close" data-dismiss="modal">&times;</button>
+                            <h4 class="modal-title">Update Shop User</h4>
+                        </div>
+                        <div class="modal-body">
+                            <!-- form Add Employee -->
+                            <div class="form-group">
+                                <label for="usr">Name: </label>
+                                <input type="text" class="form-control" id="txtName" name="txtName" placeholder="Nguyễn Văn A" />
+                            </div>
+
+                            <div class="form-group">
+                                <label for="usr">Birthday: </label>
+                                <input type="date" class="form-control" id="txtBirthday" name="txtBirthday" />
+                            </div>
+
+                            <div class="form-group">
+                                <label for="usr">Sex: </label>
+                                <br />
+                                <input type="radio" name="Sex" id="sexMale" value="Male"> Nam
+                                <input type="radio" name="Sex" id="sexFemale" value="Female"> Nữ
+                                <input type="radio" name="Sex" id="sexOther" value="Other"> Other
+                            </div>
+
+                            <div class="form-group">
+                                <label for="usr">Identity : </label>
+                                <input type="number" class="form-control" id="txtIdentiy" name="txtIdentiy" />
+                            </div>
+
+                            <div class="form-group">
+                                <label for="usr">Phone Number : </label>
+                                <input type="number" class="form-control" id="txtphone" name="txtphone" />
+                            </div>
+
+                            <div class="form-group">
+                                <label for="usr">Detail Address:</label>
+                                <input type="text" class="form-control" id="detailAddress" name="detailAddress" />
+                            </div>
+
+                            <div class="form-group">
+                                <label for="usr">Description:</label>
+                                <input type="text" class="form-control" id="txtDescription" name="txtDescription" />
+                            </div>
+
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-default" data-dismiss="modal" id="closeUpdate">Close</button>
+                            <button type="submit" class="btn btn-default" value="Submit">Submit</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    <div class="col-lg-2">
+        @*<button type="button" class="btn btn-default" data-toggle="modal" data-target="#modal_add">Add New ShopUser</button>*@
+    </div>
+<div class="pull-right page-pagination"></div>
+
+    
+
+
+

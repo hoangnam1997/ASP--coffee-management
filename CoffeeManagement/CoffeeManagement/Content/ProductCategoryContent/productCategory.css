@@ -1,0 +1,98 @@
+﻿.btn-group label
+{
+  padding-left: 40px;
+}
+
+/*input[type="radio"]:empty
+{
+  display: none;
+}
+
+input[type="radio"] ~ span:before
+{
+  position: absolute;
+  display: block;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  content: '';
+  width: 2.5em;
+  background: #D1D3D4;
+}
+
+input[type="radio"]:before
+{
+  content: '\2714';
+  text-indent: .9em;
+  color: #C2C2C2;
+}
+
+input[type="radio"]:checked ~ span:before
+{
+  content: '\2714';
+  text-indent: .3em;
+  color: #fff;
+  background-color: #5cb85c;
+  line-height: 2.5em;
+}*/
+.btn-group {
+  margin-left : 10%;
+}
+.form-control {
+ /* width: 50%;*/
+}
+
+.results tr[visible='false'],
+.no-result{
+  display:none;
+}
+
+.results tr[visible='true']{
+  display:table-row;
+}
+
+.counter{
+  padding:8px; 
+  color:#ccc;
+}
+
+th.lang {
+    text-align:center;
+}
+
+td {
+    text-align:center;
+}
+
+select.form-control{display:inline-block}
+
+.dropdown {
+    position: relative;
+    display: inline-block;
+    vertical-align: middle;
+}
+.sorting {
+    background : url(../../fonts/sort_both.png);
+    background-position : center right;
+    background-repeat : no-repeat;
+}
+
+.sorting_desc {
+    background : url(../../fonts/sort_desc.png);
+    background-position : center right;
+    background-repeat : no-repeat;
+}
+.sorting_asc {
+    background : url(../../fonts/sort_asc.png);
+    background-position : center right;
+    background-repeat : no-repeat;
+}
+
+.red {
+    background : "#CD5C5C";
+}
+
+.input-group-btn .btn {
+    border-width: 1px;
+    padding: 6px 16px;
+}

@@ -1,0 +1,33 @@
+﻿@model CoffeeManagement.Models.ViewModel.OrderViewModel
+
+<div class="item">
+    <div class="user-panel @ViewBag.Stssyle">
+        <div class="pull-left image">
+            @if (Model.Image == null)
+            {
+                <img src="~/Content/image/avatar.png" class="img-circle" alt="User Image" />
+            }
+            else
+            {
+                <img src="@Url.Content("~/Content/image/"+@Model.Image)" class="img-circle" alt="User Image" />
+            }
+        </div>
+        <div class="pull-left info">
+            <!--Ten San Pham-->
+            <p class="prdName">@Model.ProductName</p>
+            <span style="width: 300px;" href="#" title="descrit" onclick="ShowStatus(this, @Model.OrderProductId)" class="dropbtn @ViewBag.StyleSpan spanstatus" data-toggle="dropdown">
+                <i class="fa fa-spinner fa-pulse text-success"></i>
+                <i class="istatus">@ViewBag.ItemSatus</i>
+            </span>
+            <ul class="dropcontent">
+                @foreach (var item in ViewBag.Status)
+                {
+                    <li class="itemli">@item</li><br />
+                }
+            </ul>
+        </div>
+    </div>
+</div>
+
+
+

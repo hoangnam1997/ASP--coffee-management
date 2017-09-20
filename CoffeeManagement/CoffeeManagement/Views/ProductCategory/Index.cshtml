@@ -1,0 +1,197 @@
+﻿@using CoffeeManagement.Models;
+@{string language = "en";}
+@model List<ProductCategory>
+
+@{
+    Layout = "~/Views/Shared/_HomeLayout.cshtml";
+}
+<script>
+    var lst = [];
+    var counter = 0;
+    @foreach (var item in Model)
+    {
+        if (@item.IsDelete ==false)
+        {
+            <text>
+    counter++;
+    lst.push({
+        "id": counter.toString(),
+        "ID": "@(new HtmlString(@item.ID.ToString()))",
+        "Name": "@(new HtmlString(@item.Name))",
+        "Description": "@(new HtmlString(@item.Description))"
+    });
+</text>
+    }
+
+}
+</script>
+               <!-- External Css -->
+<link rel="stylesheet" href="~/Content/ProductCategoryContent/productCategory.css" type="text/css">
+
+<!-- Bootstrap Validator -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-validator/0.4.5/css/bootstrapvalidator.min.css ">
+
+<!--  External Javascript of Jquery and Bootstrap -->
+@*<script type="text/javascript" src="~/Scripts/jquery-3.1.1.js"></script>*@
+
+@*<script type="text/javascript" src="~/Scripts/ProductCategoryScripts/jquery-3.1.1.min.js"></script>*@
+<script type="text/javascript" src="~/Scripts/ProductCategoryScripts/en_US.js"></script>
+
+
+        <!-- Container -->
+        <div class="container">
+            <div class="row">
+                <!-- Search bar -->
+                <div class="col-sm-4 pull-right">
+                    <div class="input-group">
+                        <input type="text" class="form-control keySearch langInput" placeholder="Search for..." key="key_word" value="">
+                        <span class="input-group-btn">
+                            <button class="btn btn-default search lang" type="button">
+                                <i class="glyphicon glyphicon-search"></i></button>
+                        </span>
+                    </div><!-- /input-group -->
+                </div>
+            </div> 
+             <br>
+            <!-- TABLE -->
+            <div class="container">
+                <div class="row">
+                    <div class="panel panel-default table table-hover table-bordered results">
+                        <div class="panel-heading">
+                            <div class="row">
+                                <div class="col-lg-2 pull-left">
+                                    <button type="button" class="btn btn-default lang buttonAdd" id="btnIDAdd" data-toggle="modal" data-target="#addProductCategory" onclick="ResetText();"><i class="fa fa-plus" aria-hidden="true"></i></button>
+                                </div>
+                                <div class="col-lg-2 pull-right">
+                                    <div class="dropdown">
+                                        <button class="btn btn-default dropdown-toggle" type="button" id="selectedDropdownItem" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+                                            Show 5 entries
+                                            <span class="caret"></span>
+                                        </button>
+                                        <ul class="dropdown-menu pagination-page-size" aria-labelledby="dropdownMenu1">
+                                            <li data-page-size="5"><a value="5">Show 5 entries</a></li>
+                                            <li data-page-size="10"><a value="10">Show 10 entries</a></li>
+                                            <li data-page-size="15"><a value="15">Show 15 entries</a></li>
+                                        </ul>
+                                    </div>
+                                </div>
+                                
+                            </div>
+                        </div>
+                        <!-- Table -->
+                        <table class="table table-bordered table-hover table-striped" cellspacing="0" width="100%" id="example">
+                            <thead>
+                                <tr>
+                                    <th class="lang sorting" name ="noSort" key="no" aria-label="No: activate to sort column">No.</th>
+                                    <th class="lang " key="id" aria-label="ID: activate to sort column" hidden>ID</th>
+                                    <th class="lang sorting" name = "nameSort" key="name" aria-label="Name: activate to sort column">Name</th>
+                                    <th class="lang disabled" key="description">Description</th>
+                                    <th class="lang disabled" key="action">Action</th>
+                                </tr>
+                                <tr class="warning no-result">
+                                    <td colspan="4" class="lang" key="no_results"><i class="fa fa-warning"></i> No result</td>
+                                </tr>
+                            </thead>
+                            <tbody id="tableContent">
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="col-sm-0 pull-right">
+                        <nav aria-label="Page navigation">
+                            <ul class="pagination" id="pagination"></ul>
+                        </nav>
+                    </div>
+                </div>
+            </div>
+
+            <!--  Modal Add Product Category -->
+            <div class="modal fade" id="addProductCategory" role="dialog" data-backdrop="static" data-keyboard="false" tabindex="-1">
+                <div class="modal-dialog">
+                    <form id="formAdd">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                                <h4 class="modal-title lang" key="add_title">Add Product Category </h4>
+                            </div>
+                            <div class="modal-body">
+                                <div class="form-group">
+                                    <label for="name" class="lang" key="name">Name</label><label> : </label>
+                                    <div class="input-group">
+                                        <span class="input-group-addon"><span class="fa fa-tags" aria-hidden="true"></span></span>
+                                        <input type="text" name="name" value="" placeholder="Name (only letter)" id="addName" key="name" class="form-control langInput" />
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label for="description" class="lang" key="description">Description</label><label> : </label>
+                                    <div class="input-group">
+                                        <span class="input-group-addon"><span class="glyphicon glyphicon-comment" aria-hidden="true"></span></span>
+                                        <input type="text" name="addDescription" value="" id="description" rows="5" cols="30" placeholder=" Type product description" class="form-control langInput" key="descriptionInput" required>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="modal-footer">
+                                <input type="submit" class="btn btn-default lang" id="btnAdd" value="Submit now" key="add" />
+                                <button type="button" class="btn btn-default lang closeAdd" data-dismiss="modal" key="close">Close</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+            <!--  Modal Delete Product Category -->
+            <div class="modal fade" id="delProductCategory" role="dialog" style="margin-top :10%;">
+                <div class="modal-dialog">
+                    <form id="formDel">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                                <h4 class="modal-title lang" key="del_title">Delete Product Category</h4>
+                            </div>
+                            <div class="modal-body" style="text-align:center">
+                                <label for="name" class="lang" key="warning_del">Do you want to delete this category ? </label>
+                                <br>
+                                <br>
+                                <button type="submit" class="btn btn-default delBtnYes lang" id="btnDel" key="del_yes">Yes </button>
+                                <button type="button" class="btn btn-default delBtnCancle lang" key="del_no" id="btnDelCancle">No</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+            <!--  Modal Update Product Category -->
+            <div class="modal fade" id="updateProductCategory" role="dialog">
+                <div class="modal-dialog">
+                    <form id="updateForm">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                                <h4 class="modal-title lang" key="update_title">Update Product Category</h4>
+                            </div>
+                            <div class="modal-body">
+                                <div class="form-group">
+                                    <label for="name" class="lang" key="name">Name : </label>
+                                    <div class="input-group">
+                                        <span class="input-group-addon"><span class="fa fa-tags" aria-hidden="true"></span></span>
+                                        <input type="text" placeholder="Name (only letter)" id="nameUpdate" class="form-control langInput" key="name" name="name" value="" />
+                                    </div>
+                                </div>
+                                <br>
+                                <div class="form-group">
+                                    <label for="description" class="lang" key="description">Description : </label>
+                                    <div class="input-group">
+                                        <span class="input-group-addon"><span class="glyphicon glyphicon-comment" aria-hidden="true"></span></span>
+                                        <input type="text" id="descriptionUpdate" placeholder=" Type product description" class="form-control langInput" key="descriptionInput" name="updateDescription"></input>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="submit" class="btn btn-default lang enterUpdate" id="btnUpdate" key="updateButton">Update</button>
+                                <button type="button" class="btn btn-default lang" data-dismiss="modal" key="close" id="closeUpdate"> Close</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+        <script src="~/Scripts/ProductCategoryScripts/productCategory.js" type="text/javascript"></script>  
