@@ -35,7 +35,7 @@ namespace CoffeeManagement.Models
     public class ApplicationDbContext : IdentityDbContext<ApplicationUser,ApplicationRole,int,ApplicationUserLogin,ApplicationUserRole,ApplicationUserClaim>
     {
         public ApplicationDbContext()
-            : base("GalaxyCoffeeEntities2")
+            : base("GalaxyCoffee2")
         {
         }
 

@@ -16,7 +16,7 @@ namespace CoffeeManagement.Models
     public partial class GalaxyCoffeeEntities : DbContext
     {
         public GalaxyCoffeeEntities()
-            : base("name=GalaxyCoffeeEntities")
+            : base("name=GalaxyCoffee")
         {
         }
     
